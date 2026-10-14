@@ -99,13 +99,17 @@ def mk(axis,a,b,c0,c1,z0,z1,name,tag,enc=None):
     else: box(name,tag,c0,c1,a,b,z0,z1,enc,axis)
 def P(axis,s,c,z): return (s,c,z) if axis=='X' else (c,s,z)
 for nm,t,ax,a,b,c0,c1,lb,ne in V:
-    ve=t!='VC'; z0,z1=(-1.00,-0.30) if ve else (-1.50,-1.10)
-    if ve: mk(ax,a,b,c0,c1,z0,z1,f'{nm} ({t})','04.02 Vigas de equilibrio VE','lados')
+    ve=t!='VC'; z0,z1=(-1.50,-0.80) if ve else (-1.50,-1.10)
+    if ve:
+        cuts=zap_cuts(ax,c0,c1)
+        for s0,s1 in sub((a,b),cuts): mk(ax,s0,s1,c0,c1,z0,z1,f'{nm} ({t}) entre zapatas','04.02 Vigas de equilibrio VE','lados')
+        for s0,s1 in [(max(a,k0),min(b,k1)) for k0,k1 in cuts if min(b,k1)>max(a,k0)]:
+            mk(ax,s0,s1,c0,c1,-1.00,z1,f'{nm} ({t}) sobre zapata','04.02 Vigas de equilibrio VE','lados')
     else:
         for s0,s1 in sub((a,b),zap_cuts(ax,c0,c1)): mk(ax,s0,s1,c0,c1,z0,z1,f'{nm} (VC, fuera de zapata)','04.05 Vigas de conexion VC','lados')
     if ve:
         for s0,s1 in sub((a,b),zap_cuts(ax,c0,c1)):
-            mk(ax,s0,s1,c0,c1,-1.10,-1.00,f'Tecnopor {nm}','04.04 Tecnopor bajo VE')
+            mk(ax,s0,s1,c0,c1,-1.60,-1.50,f'Tecnopor {nm}','04.04 Tecnopor bajo VE')
     # acero longitudinal
     n34,n58=NBAR[t]; n=n34+n58; h=0.45 if ve else 0.35; L=b-a; ext=(lb-L-2*h)/2
     cv=0.05+0.0095+0.005
@@ -130,7 +134,7 @@ walls=[('A','Y',0,0.15,[(0.50,4.50,'VE'),(5.00,7.68,'VC'),(8.18,10.86,'VC'),(11.
        ('5','X',14.85,15.00,[(0.30,3.845,'VE'),(4.445,7.60,'VE')])]
 for eje,ax,c0,c1,segs in walls:
     for a,b,sup in segs:
-        if sup=='VE': mk(ax,a,b,c0,c1,-0.30,0.20,f'Sobrecimiento eje {eje}','03.03 Sobrecimiento','lados')
+        if sup=='VE': mk(ax,a,b,c0,c1,-0.80,0.20,f'Sobrecimiento eje {eje}','03.03 Sobrecimiento','lados')
         else:
             cuts=zap_cuts(ax,c0,c1)
             for s0,s1 in sub((a,b),cuts): mk(ax,s0,s1,c0,c1,-1.10,0.20,f'Sobrecimiento eje {eje} sobre VC','03.03 Sobrecimiento','lados')
@@ -138,8 +142,11 @@ for eje,ax,c0,c1,segs in walls:
                 mk(ax,z0_,z1_,c0,c1,-1.00,0.20,f'Sobrecimiento eje {eje} sobre zapata','03.03 Sobrecimiento','lados')
         t0=c0 if eje!='C' else 7.77; t1=t0+0.13 if eje!='C' else 7.90
         if eje=='5': t0,t1=14.87,15.00
-        mk(ax,a+0.025,b-0.025,t0,t1,0.20,2.30,f'Muro eje {eje}','05.02 Muro perimetro vivienda','muro')
-        for s in (a,b-0.025): mk(ax,s,s+0.025,t0,t1,0.20,2.30,f'Junta eje {eje}','05.03 Junta tecnopor 1in')
+        if eje in ('A','C'):   # albañilería confinada: muro endentado contra las columnas, sin junta
+            mk(ax,a,b,t0,t1,0.20,2.30,f'Muro portante eje {eje}','05.02a Muro portante linderos (KK portante)','muro')
+        else:                  # fondo: tabique con junta de 1"
+            mk(ax,a+0.025,b-0.025,t0,t1,0.20,2.30,f'Tabique eje {eje}','05.02b Muro fondo (tabique KK 18h)','muro')
+            for s_ in (a,b-0.025): mk(ax,s_,s_+0.025,t0,t1,0.20,2.30,f'Junta eje {eje}','05.03 Junta tecnopor 1in')
 
 # ---------------- CERCO DELANTERO (E-10; E-09 no recibido: CA, ZC y cimiento referenciales) ----------------
 def cerco(side,x0,x1,elems,first_h):
@@ -170,7 +177,7 @@ def pit(x0,x1,y0,y1,s=0.10):
 pits={k:pit(*v[1:]) for k,v in Z.items()}
 for k,(x0,x1,y0,y1) in pits.items(): box(f'Pozo {k}','02.01 Excavacion zapatas',x0,x1,y0,y1,-1.60,0.0)
 for nm,t,ax,a,b,c0,c1,lb,ne in V:
-    ve=t!='VC'; w=0.70 if ve else 0.55; d=-1.10 if ve else -1.50
+    ve=t!='VC'; w=0.70 if ve else 0.55; d=-1.60 if ve else -1.50
     cm=(c0+c1)/2; t0,t1=cm-w/2,cm+w/2
     lim=LX if ax=='Y' else LY
     if t0<0: t0,t1=0,w

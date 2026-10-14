@@ -15,6 +15,9 @@ Usa **Archivo > Importar** con `etapa1_modelo.dae`. Trae los mismos sólidos agr
 
 ## Convenciones
 - Origen: x = 0 en el lindero A, y = 0 en el frente de la vivienda (eje 1), z = 0 en el NTN ±0.00. El cerco queda en y negativa.
-- VE de −1.00 a −0.30 sobre tecnopor (E-10). VC de −1.50 a −1.10, modelada solo fuera de zapata (lo de adentro es concreto de zapata).
+- VE de −1.50 a −0.80, conectadas a las zapatas. Sobre la zapata solo se modela lo que sobresale (de −1.00 a −0.80), con tecnopor de 0.10 debajo de la VE entre zapatas (de −1.60 a −1.50).
+- VC de −1.50 a −1.10, modelada solo fuera de la zapata (lo de adentro es concreto de zapata).
+- Sistema mixto: los linderos A y C son muros portantes endentados (KK portante), sin junta. El fondo (eje 5) es un tabique con junta de 1".
+- El encofrado de columnas del reporte es bruto (83.5 m²); al metrado se le descuentan 4.4 m² de caras contra el muro endentado (queda en 79.1 m²).
 - Excavación: pozos con 0.10 de sobreancho (no en las caras de lindero) y zanjas solo entre pozos.
 - **Cerco:** las columnas CA, la ZC y el cimiento corrido son referenciales porque falta el plano E-09. La VA del cerco no está modelada.

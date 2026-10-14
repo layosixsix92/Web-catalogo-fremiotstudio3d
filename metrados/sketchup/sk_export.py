@@ -5,7 +5,7 @@ COL={'02.01 Excavacion zapatas':(205,133,63,70),'02.02 Excavacion zanjas VE VC':
 '03.01 Solado':(150,150,150,255),'03.02 Cimiento corrido ciclopeo':(120,110,100,255),'03.03 Sobrecimiento':(170,170,140,255),
 '04.01 Zapatas':(190,190,190,255),'04.02 Vigas de equilibrio VE':(110,140,190,255),'04.04 Tecnopor bajo VE':(250,250,250,255),
 '04.05 Vigas de conexion VC':(90,170,120,255),'04.06 Columnas 1er piso':(90,90,90,255),'04.08 Cerco (ZC, CA, solera)':(120,120,160,255),
-'05.01 Muro cerco':(214,110,60,255),'05.02 Muro perimetro vivienda':(214,110,60,255),'05.03 Junta tecnopor 1in':(255,255,120,255),
+'05.01 Muro cerco':(214,110,60,255),'05.02a Muro portante linderos (KK portante)':(180,70,40,255),'05.02b Muro fondo (tabique KK 18h)':(214,110,60,255),'05.03 Junta tecnopor 1in':(255,255,120,255),
 '04.09a Acero zapatas':(220,30,30,255),'04.09b Acero VE y VC':(220,30,30,255),'04.09c Acero columnas':(220,30,30,255)}
 # --- agrupar barras por (tag, nombre) para no crear 1,700 grupos
 grp=collections.OrderedDict()
